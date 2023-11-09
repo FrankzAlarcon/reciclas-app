@@ -90,13 +90,13 @@ export function ChatCohere() {
             backgroundColor: 'black'
           },
           left: {
-            backgroundColor: 'rgba(119, 166, 73, 1)'
+            backgroundColor: '#bdf26d'
           }
         }}
         textStyle={{
           right: {
             fontSize: 18,
-            color: 'rgba(119, 166, 73, 1)'
+            color: '#bef264'
           },
           left: {
             fontSize: 18,
@@ -116,18 +116,18 @@ export function ChatCohere() {
   // }
 
   return (
-    <View style={{ backgroundColor: 'gray', flex: 1, paddingBottom: 10 }}>
+    <View style={{ backgroundColor: '#494', flex: 1, paddingBottom: 10 }}>
       <GiftedChat
         // textInputProps={{ backgroundColor: 'black', color: 'white', borderRadius: 25, paddingLeft: 10, justifyContent: 'center', alignItems: 'center' }}
         messages={messages}
         placeholder='Escribe una pregunta'
         renderInputToolbar={renderInputToolbar}
         renderBubble={renderBubble}
-        renderTime={(props) => (<Time {...props} timeTextStyle={{ left: { color: 'white' } }} />)}
+        renderTime={(props) => (<Time {...props} timeTextStyle={{ left: { color: '#010101' } }} />)}
         renderSend={(props) => (
           <Send {...props} containerStyle={{ alignContent: 'center', alignItems: 'center', justifyContent: 'center', borderRadius: 200, backgroundColor: 'rgba(119, 166, 73, 1)', width: 50, height: 50, left: 73 }}>
             <View>
-              <Ionicons name='send' size={20} color='blue' />
+              <Ionicons name='send' size={20} color='white' />
             </View>
           </Send>
         )}

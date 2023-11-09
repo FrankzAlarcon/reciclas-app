@@ -8,7 +8,7 @@ const Keleton = () => {
       <View style={styles.imagen}>
         <Skeleton width={320} height={140} props={{ borderTopRightRadius: 25, borderTopLeftRadius: 25 }} />
       </View>
-      <View style={{ height: 100, width: 320, backgroundColor: 'rgb(218,217,217)', top: -20, borderRadius: 25, alignItems: 'center', paddingVertical: 15 }}>
+      <View style={{ height: 100, width: 320, backgroundColor: 'rgb(174, 171, 171)', top: -20, borderRadius: 25, alignItems: 'center', paddingVertical: 15 }}>
         <Skeleton width={250} height={15} />
         <View style={{ height: 10 }} />
         <Skeleton width={250} height={15} />
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: 320,
     borderRadius: 25,
     marginBottom: 20,
-    backgroundColor: 'rgb(218,217,217)'
+    backgroundColor: 'rgb(174, 171, 171)'
   },
   imagen: {
     height: 140,

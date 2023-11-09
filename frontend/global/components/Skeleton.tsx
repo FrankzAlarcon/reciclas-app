@@ -27,7 +27,7 @@ const Skeleton = ({ width, height, props }: SkeletonProps) => {
   }, [opacity])
 
   return (
-    <Animated.View style={{ opacity: opacity.current, height, width, backgroundColor: '#eee', ...props }} />
+    <Animated.View style={{ opacity: opacity.current, height, width, backgroundColor: '#bababa', ...props }} />
   )
 }
 

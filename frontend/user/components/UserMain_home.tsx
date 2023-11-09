@@ -1,6 +1,6 @@
 import { Gradient } from "../../global";
 import React, { useEffect, useState } from "react";
-import { View, Image, StyleSheet, Dimensions } from "react-native";
+import { View, Image, StyleSheet, Dimensions, Alert } from "react-native";
 import { getToDataUser } from "../services/user_service";
 import { Data } from "../../Types";
 import {
@@ -18,6 +18,8 @@ import {
   TextInput,
 } from "react-native-paper";
 import { ProgressChart } from "react-native-chart-kit";
+import { signOut } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 const screenWidth = Dimensions.get("window").width - 60;
 const chartConfig = {
@@ -160,7 +162,7 @@ const UserMain_home = () => {
                 strokeWidth={10}
                 radius={80}
                 chartConfig={chartConfig}
-                // hideLegend={false}
+              // hideLegend={false}
               />
             </View>
           </View>
@@ -251,6 +253,16 @@ const UserMain_home = () => {
             </View>
             <Text
               variant="bodySmall"
+              onPress={() => Alert.alert('¿Estás seguro que quieres cerrar tú sesión ahora?', '', [
+                {
+                  text: 'Cancelar',
+                  style: 'cancel'
+                },
+                {
+                  text: 'Salir',
+                  onPress: () => signOut(auth).then(() => console.log('sesión cerrada')).catch((error) => { console.log('error:', error) })
+                }
+              ])}
               style={{
                 marginTop: 20,
                 textDecorationLine: "underline",

@@ -17,6 +17,8 @@ export const GetDataForNews = async () => {
                   descripcion
                   fechaInicio
                   fechaFin
+                  horaInicio
+                  horaFin
                   imagen {
                     node {
                       mediaItemUrl
@@ -27,6 +29,7 @@ export const GetDataForNews = async () => {
                   author {
                     node {
                       name
+          
                     }
                   }
                 }

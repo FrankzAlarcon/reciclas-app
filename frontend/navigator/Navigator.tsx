@@ -22,6 +22,7 @@ const Navigator = () => {
   // validation if user is authenticated
   const [initializing, setInitializing] = useState(true)
   const { user, setUser } = useAuthenticate()
+  console.log(auth.currentUser?.displayName)
 
   const onAuthStateChanged = (user: any) => {
     setUser(user);
@@ -65,112 +66,116 @@ const Navigator = () => {
     UserQr_home: { focused: "bicycle-outline", notFocused: "bicycle-sharp" },
   };
 
-  return user ? (
-    <NavigationContainer>
-      <tab.Navigator
-        initialRouteName="UserMain_home"
-        screenOptions={({ route }) => ({
-          headerShown: false,
-          tabBarLabelStyle: { display: "none" },
-          tabBarStyle: {
-            backgroundColor: "#494D4f",
-            borderColor: "#494D4f",
-            height: 55,
-          },
+  // && auth.currentUser?.emailVerified
 
-          tabBarIcon: ({ focused, color, size }) => {
-            const { focused: focusedIcon, notFocused: notFocusedIcon } =
-              tabIconMapping[route.name] || {};
+  return user
+    ? (
+      <NavigationContainer>
+        <tab.Navigator
+          initialRouteName="UserMain_home"
+          screenOptions={({ route }) => ({
+            headerShown: false,
+            tabBarLabelStyle: { display: "none" },
+            tabBarStyle: {
+              backgroundColor: "#494D4f",
+              borderColor: "#494D4f",
+              height: 55,
+            },
 
-            return (
-              <Ionicons
-                name={focused ? focusedIcon : notFocusedIcon}
-                size={size}
-                color={color}
-              />
-            );
-          },
-          tabBarInactiveTintColor: "#494",
-          tabBarActiveTintColor: "grey",
-        })}
-      >
-        <Stack.Screen
-          name="UserMain_home"
-          component={UserMain_home}
-          listeners={({ navigation, route }) => ({
-            tabPress: () => {
-              Animated.spring(tabOffsetValue, {
-                toValue: 0,
-                useNativeDriver: true,
-              }).start();
+            tabBarIcon: ({ focused, color, size }) => {
+              const { focused: focusedIcon, notFocused: notFocusedIcon } =
+                tabIconMapping[route.name] || {};
+
+              return (
+                <Ionicons
+                  name={focused ? focusedIcon : notFocusedIcon}
+                  size={size}
+                  color={color}
+                />
+              );
             },
+            tabBarInactiveTintColor: "#494",
+            tabBarActiveTintColor: "grey",
           })}
+        >
+          <Stack.Screen
+            name="UserMain_home"
+            component={UserMain_home}
+            listeners={({ navigation, route }) => ({
+              tabPress: () => {
+                Animated.spring(tabOffsetValue, {
+                  toValue: 0,
+                  useNativeDriver: true,
+                }).start();
+              },
+            })}
+          />
+          <Stack.Screen
+            name="UserChart_home"
+            component={UserChart_home}
+            listeners={({ navigation, route }) => ({
+              tabPress: () => {
+                Animated.spring(tabOffsetValue, {
+                  toValue: getWidth(),
+                  useNativeDriver: true,
+                }).start();
+              },
+            })}
+          />
+          <Stack.Screen
+            name="TabNavigator"
+            component={TabNavigator}
+            listeners={({ navigation, route }) => ({
+              tabPress: () => {
+                Animated.spring(tabOffsetValue, {
+                  toValue: getWidth() * 2,
+                  useNativeDriver: true,
+                }).start();
+              },
+            })}
+          />
+          <Stack.Screen
+            name="ChatCohere"
+            component={ChatCohere}
+            listeners={() => ({
+              tabPress: () => {
+                Animated.spring(tabOffsetValue, {
+                  toValue: getWidth() * 3,
+                  useNativeDriver: true,
+                }).start();
+              },
+            })}
+          />
+          <Stack.Screen
+            name="UserQr_home"
+            component={UserQr_home}
+            listeners={() => ({
+              tabPress: () => {
+                Animated.spring(tabOffsetValue, {
+                  toValue: getWidth() * 4,
+                  useNativeDriver: true,
+                }).start();
+              },
+            })}
+          />
+        </tab.Navigator>
+        <Animated.View
+          style={{
+            width: 50,
+            height: 4,
+            position: "absolute",
+            backgroundColor: "#494",
+            bottom: 50,
+            left: 14,
+            borderRadius: 50,
+            transform: [{ translateX: tabOffsetValue }],
+          }}
         />
-        <Stack.Screen
-          name="UserChart_home"
-          component={UserChart_home}
-          listeners={({ navigation, route }) => ({
-            tabPress: () => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth(),
-                useNativeDriver: true,
-              }).start();
-            },
-          })}
-        />
-        <Stack.Screen
-          name="TabNavigator"
-          component={TabNavigator}
-          listeners={({ navigation, route }) => ({
-            tabPress: () => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() * 2,
-                useNativeDriver: true,
-              }).start();
-            },
-          })}
-        />
-        <Stack.Screen
-          name="ChatCohere"
-          component={ChatCohere}
-          listeners={() => ({
-            tabPress: () => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() * 3,
-                useNativeDriver: true,
-              }).start();
-            },
-          })}
-        />
-        <Stack.Screen
-          name="UserQr_home"
-          component={UserQr_home}
-          listeners={() => ({
-            tabPress: () => {
-              Animated.spring(tabOffsetValue, {
-                toValue: getWidth() * 4,
-                useNativeDriver: true,
-              }).start();
-            },
-          })}
-        />
-      </tab.Navigator>
-      <Animated.View
-        style={{
-          width: 50,
-          height: 4,
-          position: "absolute",
-          backgroundColor: "#494",
-          bottom: 50,
-          left: 14,
-          borderRadius: 50,
-          transform: [{ translateX: tabOffsetValue }],
-        }}
-      />
-    </NavigationContainer>
-  ) : (
-    <LoginAthentication />
-  );
+      </NavigationContainer>
+    )
+    : (
+      <LoginAthentication />
+    );
 };
 
 export default Navigator;

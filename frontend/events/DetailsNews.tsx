@@ -9,7 +9,7 @@ interface Props extends NativeStackScreenProps<RootStackParams, 'DetailsNews'> {
 
 const DetailsNews = ({ navigation, route }: Props) => {
   const { news }: { news: Edge } = route.params
-  const { nombre, modalidad, descripcion, fechaInicio, lugar, imagen } = news.node
+  const { nombre, modalidad, descripcion, fechaInicio, lugar, imagen, horaInicio } = news.node
   const { position, startMovingPosition, opacity, fadeIn } = useAnimation()
 
   useEffect(() => {
@@ -29,8 +29,12 @@ const DetailsNews = ({ navigation, route }: Props) => {
             <Animated.Text>{modalidad}</Animated.Text>
           </Animated.View>
           <Animated.View>
-            <Animated.Text style={{ fontWeight: 'bold' }}>Fecha de Inicio:</Animated.Text>
+            <Animated.Text style={{ fontWeight: 'bold' }}>Fecha:</Animated.Text>
             <Animated.Text>{fechaInicio}</Animated.Text>
+          </Animated.View>
+          <Animated.View>
+            <Animated.Text style={{ fontWeight: 'bold' }}>Hora: </Animated.Text>
+            <Animated.Text>{horaInicio}</Animated.Text>
           </Animated.View>
         </Animated.View>
         <Animated.Text style={{ fontSize: 15, fontWeight: '300', marginTop: 20, opacity, transform: [{ translateY: position }] }}>{descripcion}</Animated.Text>

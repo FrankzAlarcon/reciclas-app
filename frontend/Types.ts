@@ -133,6 +133,8 @@ export interface EdgeNode {
     fechaInicio: string;
     fechaFin: string;
     imagen: Imagen;
+    horaInicio: string;
+    horaFin: string,
     modalidad: string;
     lugar: string;
     author: Author;
