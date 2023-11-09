@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx prisma db push && node ./dist/index.js",
+    "start:dev": "node ./dist/index.js",
     "dev": "nodemon index.ts",
     "build": "tsc && node ./dist/deploy.js"
   },
