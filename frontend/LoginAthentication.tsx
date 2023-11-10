@@ -24,9 +24,9 @@ const LoginAthentication = () => {
     email: '',
     password: '',
     nombre: ''
-  });
+  })
 
-  const { email, password } = form;
+  const { email, password, nombre } = form;
 
   const hideDialog = () => setVisible(!visible);
 
@@ -256,7 +256,7 @@ const LoginAthentication = () => {
                   marginBottom: 25,
                   marginHorizontal: '10%'
                 }}
-                onPress={() => registerWithEmail(email, password)}
+                onPress={() => registerWithEmail(email, password, nombre)}
               // onPress={() => signInwithEmail(email, password)}
               >
                 Registrate
