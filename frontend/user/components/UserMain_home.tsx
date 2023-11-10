@@ -45,7 +45,7 @@ const UserMain_home = () => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = {
-    backgroundColor: "#c0c0c0",
+    backgroundColor: "#494D4f",
     padding: 30,
     margin: 20,
     borderRadius: 10,
@@ -162,7 +162,7 @@ const UserMain_home = () => {
                 strokeWidth={10}
                 radius={80}
                 chartConfig={chartConfig}
-              // hideLegend={false}
+                // hideLegend={false}
               />
             </View>
           </View>
@@ -177,17 +177,25 @@ const UserMain_home = () => {
           contentContainerStyle={containerStyle}
         >
           <View>
-            <Text variant="headlineSmall">
-              <MaterialIcons name="person-pin" size={20} color="black" /> Mi
+            <Text
+              variant="titleLarge"
+              style={{
+                textAlign: "center",
+                color: "#bdf26d",
+                letterSpacing: 1,
+              }}
+            >
+              <MaterialIcons name="person-pin" size={20} color="#bdf26d" />{" "}
               Perfil
             </Text>
             <TextInput
               mode="outlined"
               label="Nombre y Apellido"
-              placeholder="Type something"
+              placeholder="Cambia tus nombres"
               activeOutlineColor="#000"
               outlineStyle={{ borderColor: "#fff", borderRadius: 10 }}
               right={<TextInput.Affix text="/100" />}
+              style={{ marginVertical: 5 }}
             />
             <TextInput
               mode="outlined"
@@ -196,6 +204,7 @@ const UserMain_home = () => {
               outlineStyle={{ borderColor: "#fff", borderRadius: 10 }}
               placeholder="Type something"
               right={<TextInput.Affix text="/100" />}
+              style={{ marginVertical: 5 }}
             />
 
             <TextInput
@@ -205,21 +214,32 @@ const UserMain_home = () => {
               outlineStyle={{ borderColor: "#fff", borderRadius: 10 }}
               placeholder="Type something"
               right={<TextInput.Affix text="/40" />}
+              style={{ marginVertical: 5 }}
+            />
+            <TextInput
+              mode="outlined"
+              label="Ciudad"
+              activeOutlineColor="#000"
+              outlineStyle={{
+                borderColor: "#fff",
+                borderRadius: 10,
+              }}
+              placeholder="Cambia de ciudad"
+              // right={<TextInput.Affix text="/40" />}
+              style={{ marginVertical: 5 }}
             />
 
             <View
               style={{
-                marginTop: 20,
-                marginBottom: 10,
+                marginVertical: 20,
                 alignItems: "center",
               }}
             >
-              <Text variant="bodyLarge">
-                <MaterialCommunityIcons
-                  name="face-agent"
-                  size={24}
-                  color="black"
-                />{" "}
+              <MaterialIcons name="contact-support" size={28} color="#fff" />
+              <Text
+                variant="bodyLarge"
+                style={{ textDecorationLine: "underline", color: "#fff" }}
+              >
                 Contacta a soporte
               </Text>
             </View>
@@ -252,21 +272,33 @@ const UserMain_home = () => {
               </Button>
             </View>
             <Text
-              variant="bodySmall"
-              onPress={() => Alert.alert('¿Estás seguro que quieres cerrar tú sesión ahora?', '', [
-                {
-                  text: 'Cancelar',
-                  style: 'cancel'
-                },
-                {
-                  text: 'Salir',
-                  onPress: () => signOut(auth).then(() => console.log('sesión cerrada')).catch((error) => { console.log('error:', error) })
-                }
-              ])}
+              variant="bodyMedium"
+              onPress={() =>
+                Alert.alert(
+                  "¿Estás seguro que quieres cerrar tú sesión ahora?",
+                  "",
+                  [
+                    {
+                      text: "Cancelar",
+                      style: "cancel",
+                    },
+                    {
+                      text: "Salir",
+                      onPress: () =>
+                        signOut(auth)
+                          .then(() => console.log("sesión cerrada"))
+                          .catch((error) => {
+                            console.log("error:", error);
+                          }),
+                    },
+                  ]
+                )
+              }
               style={{
                 marginTop: 20,
                 textDecorationLine: "underline",
                 textAlign: "center",
+                color: "#494",
               }}
             >
               Cerrar sesión

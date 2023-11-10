@@ -15,6 +15,9 @@ const UserQr_home = () => {
     if (infoQrUser === "") {
       setInfoQrUser(baseUser._id);
     }
+    setTimeout(() => {
+      setInfoQrUser("");
+    }, 15000);
   };
 
   return (
