@@ -50,6 +50,32 @@ const data = [
     quantity: "3,5",
   },
 ];
+
+//---
+const mesesEnEspanol = [
+  "enero",
+  "febrero",
+  "marzo",
+  "abril",
+  "mayo",
+  "junio",
+  "julio",
+  "agosto",
+  "septiembre",
+  "octubre",
+  "noviembre",
+  "diciembre",
+];
+
+const fechaActual = new Date();
+const numeroMesActual = fechaActual.getMonth();
+const indiceMesAnterior = (numeroMesActual + 11) % 12;
+const indiceMesSiguiente = (numeroMesActual + 1) % 12;
+const mesActual = mesesEnEspanol[numeroMesActual];
+const mesAnterior = mesesEnEspanol[indiceMesAnterior];
+const mesSiguiente = mesesEnEspanol[indiceMesSiguiente];
+
+//---
 const UserChart_home = () => {
   return (
     <Gradient>
@@ -75,19 +101,15 @@ const UserChart_home = () => {
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
-          //   bottom: 10,
           top: 10,
         }}
       >
         <LineChart
           data={{
-            labels: ["Octubre", "Noviembre", "Diciembre", "Enero"],
+            labels: [mesAnterior, mesActual, mesSiguiente],
             datasets: [
               {
                 data: [
-                  Math.random() * 10,
-                  Math.random() * 10,
-                  Math.random() * 10,
                   Math.random() * 10,
                   Math.random() * 10,
                   Math.random() * 10,
@@ -95,7 +117,7 @@ const UserChart_home = () => {
               },
             ],
           }}
-          width={Dimensions.get("window").width - 38} // from react-native
+          width={Dimensions.get("window").width - 38}
           // width={Dimensions.get("window").width}
           height={200}
           // yAxisLabel="$"
@@ -126,8 +148,6 @@ const UserChart_home = () => {
       </View>
 
       {/* ----- */}
-
-      {/* <View style={styles.columns}></View> */}
       <Text
         style={{
           color: "white",
@@ -139,8 +159,6 @@ const UserChart_home = () => {
       >
         David evitaste el consumo de:
       </Text>
-
-      {/* <SafeAreaView> */}
       <View
         style={{
           flex: 1,
@@ -162,7 +180,6 @@ const UserChart_home = () => {
                   width,
                   justifyContent: "center",
                   alignItems: "center",
-                  // margin: 10,
                   borderColor: "rgba(68, 153, 68, 0.3)",
                   borderRadius: 10,
                   borderWidth: 1,
@@ -184,7 +201,12 @@ const UserChart_home = () => {
                   }}
                 />
                 <Text
-                  style={{ color: "white", fontSize: 15, marginVertical: 10 }}
+                  style={{
+                    color: "white",
+                    fontSize: 15,
+                    marginVertical: 10,
+                    letterSpacing: 1,
+                  }}
                 >
                   {item.quantity}
                 </Text>
@@ -193,40 +215,10 @@ const UserChart_home = () => {
           }}
         />
       </View>
-      {/* </SafeAreaView> */}
-      {/* </View> */}
-      {/* </View> */}
     </Gradient>
   );
 };
 
 export default UserChart_home;
 
-const styles = StyleSheet.create({
-  content_glass: {
-    flex: 1,
-    width: "90%",
-    height: "55%",
-    position: "absolute",
-    bottom: 15,
-    borderRadius: 20,
-    margin: "auto",
-    marginLeft: 20,
-    // marginRight: 15,
-    display: "flex",
-    flexWrap: "wrap",
-
-    backgroundColor: "rgba(192, 192, 192, .2)",
-    // opacity: 0.2,
-  },
-  columns: {
-    width: "50%",
-    marginVertical: 5,
-  },
-  chip_style: {
-    margin: 5,
-    height: 60,
-    display: "flex",
-    flexDirection: "column",
-  },
-});
+const styles = StyleSheet.create({});
