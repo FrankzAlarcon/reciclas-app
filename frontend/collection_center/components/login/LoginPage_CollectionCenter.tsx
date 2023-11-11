@@ -6,16 +6,16 @@ import { KeyboardAvoidingWrapper, Gradient, Input, useCollectionCenterContext } 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../Types'
 import { Button, ActivityIndicator } from 'react-native-paper'
-import { FIREBASE_AUTH } from '../../../firebaseConfig'
 import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
 import { postCenterEmployeeIdToken } from '../../services'
 import { MessageCollectionCenter } from '../../modals'
+import { auth } from '../../../config/firebase'
 
 type LoginPageCollectionCenterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'LoginPage_CollectionCenter'>;
 }
 
-export function LoginPageCollectionCenter ({ navigation }: LoginPageCollectionCenterProps) {
+export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCenterProps) {
   const [centerEmployee, setCenterEmployee] = useState('')
   const [password, setPassword] = useState('')
   const [loginErrorMessage, setLoginErrorMessage] = useState('')
@@ -26,7 +26,7 @@ export function LoginPageCollectionCenter ({ navigation }: LoginPageCollectionCe
   const loginUser = async () => {
     setIsLoading(true)
     try {
-      const response = await signInWithEmailAndPassword(FIREBASE_AUTH, centerEmployee, password)
+      const response = await signInWithEmailAndPassword(auth, centerEmployee, password)
       const idToken = await getIdToken(response.user)
       const loginResponse = await postCenterEmployeeIdToken(idToken)
       if (loginResponse.body.role === 'CENTER_EMPLOYEE') {
@@ -95,7 +95,7 @@ export function LoginPageCollectionCenter ({ navigation }: LoginPageCollectionCe
             <ReciclasLogo width={30} height={30} style={LoginPageStyles.bottomAppLogo} fill='#BDF26D' />
           </View>
           <MessageCollectionCenter
-            handlePress={() => {}}
+            handlePress={() => { }}
             title='¡Error al iniciar sesión!'
             description={loginErrorMessage}
             visible={showLoginErrorModal}

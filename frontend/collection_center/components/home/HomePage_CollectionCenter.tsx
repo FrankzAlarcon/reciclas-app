@@ -6,17 +6,17 @@ import { getToPickupCollectionCenter } from '../../services'
 import { Gradient, useCollectionCenterContext } from '../../../global'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { ConfirmationCollectionCenter } from '../../modals'
-import { FIREBASE_AUTH } from '../../../firebaseConfig'
 import { ProgressChart } from 'react-native-chart-kit'
 import { ReciclasLogo } from '../../../assets'
 import { User, signOut } from 'firebase/auth'
 import { useFocusEffect } from '@react-navigation/native'
+import { auth } from '../../../config/firebase'
 
 type HomePageCollectionCenterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'HomePage_CollectionCenter'>;
 }
 
-export function HomePageCollectionCenter ({ navigation }: HomePageCollectionCenterProps) {
+export function HomePageCollectionCenter({ navigation }: HomePageCollectionCenterProps) {
   const [totalCollectedToday, setTotalCollectedToday] = useState<number>()
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
   const { setFirebaseActiveUser, activeCenterEmployee, setActiveCenterEmployee, idToken, setIdToken, kgCollectedToday } = useCollectionCenterContext()
@@ -35,7 +35,7 @@ export function HomePageCollectionCenter ({ navigation }: HomePageCollectionCent
   const screenWidth = Dimensions.get('window').width
   const screenHeight = Dimensions.get('window').height
 
-  async function fetchTotalCollectedToday () {
+  async function fetchTotalCollectedToday() {
     const totalCollectedTodayBasic = await getToPickupCollectionCenter(activeCenterEmployee.collectCenterId, idToken)
     setTotalCollectedToday(totalCollectedTodayBasic)
     setChartData([(totalCollectedTodayBasic > 300 ? 1 : (totalCollectedTodayBasic) / 300)])
@@ -66,10 +66,10 @@ export function HomePageCollectionCenter ({ navigation }: HomePageCollectionCent
           setFirebaseActiveUser({} as User)
           setActiveCenterEmployee({} as CenterEmployeeBody)
           setIdToken('')
-          signOut(FIREBASE_AUTH)
+          signOut(auth)
           navigation.navigate('LoginPage_CollectionCenter')
         }}
-        onNotConfirm={() => {}}
+        onNotConfirm={() => { }}
         title='¿Cerrar sesión?'
         description='Estás por salir de la pantalla principal, ¿estás seguro de querer cerrar sesión?'
         confirmText='Cerrar sesión'

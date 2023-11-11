@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { GradientLogin } from './global';
 import { ReciclasLogo } from './assets';
@@ -15,10 +15,12 @@ import {
 import { useForm } from './hooks/useForm';
 import { signInwithEmail } from './utils/signInWithEmail';
 import { registerWithEmail } from './utils/registerWithEmail';
+import { CollectionCenter, UserIdentificationCollectionCenter } from './collection_center';
 
 const LoginAthentication = () => {
   const [visible, setVisible] = React.useState(false);
   const [showRegis, setShowRegis] = React.useState(false);
+  const [userCenter, setUserCenter] = useState(false)
 
   const { form, onChange } = useForm({
     email: '',
@@ -28,12 +30,14 @@ const LoginAthentication = () => {
 
   const { email, password, nombre } = form;
 
-  const hideDialog = () => setVisible(!visible);
+  const hideDialog = () => {
+    setVisible(!visible)
+  }
 
   // Modal
   const showRegister = () => setShowRegis(!showRegis);
 
-  return (
+  return userCenter ? (
     <PaperProvider>
       <GradientLogin>
         <SafeAreaView style={styles.logoHome}>
@@ -134,7 +138,7 @@ const LoginAthentication = () => {
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={() => setVisible(false)}>Cancel</Button>
-              <Button onPress={() => console.log('Ok')}>Ok</Button>
+              <Button onPress={() => setUserCenter(true)}>Ok</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -266,8 +270,9 @@ const LoginAthentication = () => {
         </Portal>
       </GradientLogin>
     </PaperProvider>
-  );
-};
+  ) :
+    (<CollectionCenter />)
+}
 
 export default LoginAthentication;
 
