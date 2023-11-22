@@ -4,26 +4,94 @@ import { Gradient } from "../../global";
 import { Button, Divider, Text } from "react-native-paper";
 import { ReciclasLogo } from "../../assets";
 import QRCode from "react-native-qrcode-svg";
+import { useAuthenticate } from "../../context/AuthenticateUserContext";
 
 let baseUser = {
   _id: "david@gmail.com",
   name: "David",
 };
+
+let apiUrlGetKgUser =
+  "https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/log-actions-collaborators/user/";
+
+type DataItem = {
+  attentionQuality: null;
+  collaboratorEmail: string;
+  collectCenterId: number;
+  createdAt: string;
+  id: number;
+  quantity: number;
+  receiverEmail: string;
+  submitDate: string;
+  updatedAt: string;
+};
+
+type DataResponse = {
+  body: DataItem[];
+  error: null | any;
+};
 const UserQr_home = () => {
   const [infoQrUser, setInfoQrUser] = useState("");
+  const { userToken, user } = useAuthenticate();
+  const [userKg, setUserKg] = useState<DataResponse>({
+    body: [
+      {
+        attentionQuality: null,
+        collaboratorEmail: "usuario@email.com",
+        collectCenterId: 1,
+        createdAt: "2023-11-11T13:43:26.060Z",
+        id: 1,
+        quantity: 10.5,
+        receiverEmail: "empleado@email.com",
+        submitDate: "2023-10-24T14:30:00.000Z",
+        updatedAt: "2023-11-11T13:43:26.060Z",
+      },
+    ],
+    error: null,
+  });
+
+  const userIdEmail = user?.email;
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userToken}`,
+    },
+  };
+
+  const getKgUser = async () => {
+    try {
+      const response = await fetch(
+        apiUrlGetKgUser + userIdEmail,
+        requestOptions
+      );
+      const data = await response.json();
+
+      setUserKg(data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    console.log(
+      "userKg api-> ",
+      userKg.body.reduce((total: number, item: any) => total + item.quantity, 0)
+    );
+  };
   const onPressGenerateQR = () => {
     if (infoQrUser === "") {
       setInfoQrUser(baseUser._id);
+      // console.log("userKg-> ", userKg);
     }
     setTimeout(() => {
       setInfoQrUser("");
+      getKgUser();
     }, 15000);
   };
 
   return (
     <>
       <Gradient>
-        {/* <Text>UserQr_home</Text> */}
         <View style={styles.logoHome}>
           <ReciclasLogo
             // style={{ marginBottom: 10 }}
