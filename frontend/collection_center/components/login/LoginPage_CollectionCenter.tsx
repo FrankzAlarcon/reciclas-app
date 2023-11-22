@@ -1,15 +1,16 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import { LoginPageStyles } from './LoginPageStyles_Login'
 import { Password, ReciclasLogo, User } from '../../../assets'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { KeyboardAvoidingWrapper, Gradient, Input, useCollectionCenterContext } from '../../../global'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../../Types'
-import { Button, ActivityIndicator } from 'react-native-paper'
+import { Button, ActivityIndicator, Dialog, Portal } from 'react-native-paper'
 import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
 import { postCenterEmployeeIdToken } from '../../services'
 import { MessageCollectionCenter } from '../../modals'
 import { auth } from '../../../config/firebase'
+import { useAuthenticate } from '../../../context/AuthenticateUserContext'
 
 type LoginPageCollectionCenterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'LoginPage_CollectionCenter'>;
@@ -22,6 +23,8 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
   const [showLoginErrorModal, setShowLoginErrorModal] = useState(false)
   const { setFirebaseActiveUser, setIdToken, setActiveCenterEmployee, setKgCollectedToday } = useCollectionCenterContext()
   const [isLoading, setIsLoading] = useState(false)
+  const [visible, setVisible] = React.useState(false);
+  const { userCenter, setUserCenter } = useAuthenticate();
 
   const loginUser = async () => {
     setIsLoading(true)
@@ -48,12 +51,15 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
     }
     setIsLoading(false)
   }
+  const hideDialog = () => {
+    setVisible(!visible);
+  };
 
   return (
     <Gradient>
       <KeyboardAvoidingWrapper>
         <View>
-          <ReciclasLogo style={LoginPageStyles.appLogo} fill='#BDF26D' />
+          <ReciclasLogo style={LoginPageStyles.appLogo} fill='#BDF26D' onPress={() => hideDialog()} />
           <Text style={LoginPageStyles.appTitle}>RE·CICLAS</Text>
           <Text style={LoginPageStyles.appSubTitle}>ECUADOR</Text>
           <Text style={LoginPageStyles.appDescription}>
@@ -102,6 +108,25 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
             setVisible={setShowLoginErrorModal}
             errorMessage
           />
+          <Portal>
+            <Dialog visible={visible} onDismiss={hideDialog}>
+              <Dialog.Icon icon="alert" />
+              <Dialog.Title style={{ color: "#000", alignSelf: "center" }}>
+                Centro de acopio
+              </Dialog.Title>
+              <Dialog.Content>
+                <Text>Seguro quiere ingresar?</Text>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={() => setVisible(false)}>Cancel</Button>
+                <Button onPress={() => {
+                  setUserCenter(false)
+                  setVisible(!visible)
+                }
+                }>Ok</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
       </KeyboardAvoidingWrapper>
     </Gradient>

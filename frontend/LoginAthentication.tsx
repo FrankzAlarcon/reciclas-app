@@ -19,11 +19,13 @@ import {
   CollectionCenter,
   UserIdentificationCollectionCenter,
 } from "./collection_center";
+import { useAuthenticate } from "./context/AuthenticateUserContext";
 
 const LoginAthentication = () => {
   const [visible, setVisible] = React.useState(false);
   const [showRegis, setShowRegis] = React.useState(false);
-  const [userCenter, setUserCenter] = useState(true);
+
+  const { userCenter, setUserCenter } = useAuthenticate();
 
   const { form, onChange } = useForm({
     email: "",
@@ -40,7 +42,7 @@ const LoginAthentication = () => {
   // Modal
   const showRegister = () => setShowRegis(!showRegis);
 
-  return userCenter ? (
+  return !userCenter ? (
     <PaperProvider>
       <GradientLogin>
         <SafeAreaView style={styles.logoHome}>
@@ -139,7 +141,10 @@ const LoginAthentication = () => {
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={() => setVisible(false)}>Cancel</Button>
-              <Button onPress={() => setUserCenter(true)}>Ok</Button>
+              <Button onPress={() => {
+                setUserCenter(true)
+                setVisible(!visible)
+              }}>Ok</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
@@ -256,7 +261,7 @@ const LoginAthentication = () => {
                   marginHorizontal: "10%",
                 }}
                 onPress={() => registerWithEmail(email, password, nombre)}
-                // onPress={() => signInwithEmail(email, password)}
+              // onPress={() => signInwithEmail(email, password)}
               >
                 Registrate
               </Button>

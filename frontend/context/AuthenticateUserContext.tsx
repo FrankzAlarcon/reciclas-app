@@ -8,6 +8,8 @@ interface AuthenticateUserContextProps {
   setActualUser: any;
   userToken: any;
   setUserToken: any;
+  userCenter: any;
+  setUserCenter: any
 }
 
 const AuthenticateUserContext = createContext(
@@ -18,6 +20,7 @@ const AuthenticateUserContextProvider = ({ children }: any) => {
   const [user, setUser] = useState("");
   const [actualUser, setActualUser] = useState("");
   const [userToken, setUserToken] = useState(null);
+  const [userCenter, setUserCenter] = useState(false);
   return (
     <AuthenticateUserContext.Provider
       value={{
@@ -27,6 +30,8 @@ const AuthenticateUserContextProvider = ({ children }: any) => {
         setActualUser,
         userToken,
         setUserToken,
+        userCenter,
+        setUserCenter
       }}
     >
       {children}

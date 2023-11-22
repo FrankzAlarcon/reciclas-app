@@ -12,6 +12,7 @@ import { ChatCohere } from "../cohere/ChatCohere";
 import { useAuthenticate } from "../context/AuthenticateUserContext";
 import { auth } from "../config/firebase";
 import LoginAthentication from "../LoginAthentication";
+import { CollectionCenter, LoginPageCollectionCenter } from "../collection_center";
 
 const Stack = createNativeStackNavigator();
 const tab = createBottomTabNavigator();
@@ -70,6 +71,12 @@ const Navigator = () => {
 
   // && auth.currentUser?.emailVerified
 
+  // if (!user) {
+  //   // Martin 
+  //   return (
+  //     <LoginAthentication />
+  //   )
+  // } else {
   return user ? (
     <NavigationContainer>
       <tab.Navigator
@@ -176,6 +183,8 @@ const Navigator = () => {
   ) : (
     <LoginAthentication />
   );
+  // }
+
 };
 
 export default Navigator;
