@@ -1,5 +1,5 @@
 export const getToPickupCollectionCenter = async (collectionCenterId: number|undefined, idToken: string): Promise<number> => {
-  const url = `http://${process.env.EXPO_PUBLIC_LOCAL_IP}:3000/api/v1/collect-centers/${collectionCenterId}/total-today-recolected`
+  const url = `https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/collect-centers/${collectionCenterId}/total-today-recolected`
   return fetch(url, {
     method: 'GET',
     headers: {
@@ -18,5 +18,6 @@ export const getToPickupCollectionCenter = async (collectionCenterId: number|und
     })
     .catch(error => {
       console.error('Fetch error:', error)
+      throw error
     })
 }

@@ -1,59 +1,67 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { LoginPageStyles } from './LoginPageStyles_Login'
-import { Password, ReciclasLogo, User } from '../../../assets'
+import { LoginPageStyles } from '../styles'
+import { Password, ReciclasLogo, User } from '../../assets'
 import React, { useState } from 'react'
-import { KeyboardAvoidingWrapper, Gradient, Input, useCollectionCenterContext } from '../../../global'
+import { KeyboardAvoidingWrapper, Gradient, Input, useCollectionCenterContext } from '../../global'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../../Types'
+import { RootStackParamList } from '../../Types'
 import { Button, ActivityIndicator, Dialog, Portal } from 'react-native-paper'
-import { signInWithEmailAndPassword, getIdToken } from 'firebase/auth'
-import { postCenterEmployeeIdToken } from '../../services'
-import { MessageCollectionCenter } from '../../modals'
-import { auth } from '../../../config/firebase'
-import { useAuthenticate } from '../../../context/AuthenticateUserContext'
+import { signInWithEmailAndPassword, getIdToken, signOut } from 'firebase/auth'
+import { postCenterEmployeeIdToken } from '../services'
+import { MessageCollectionCenter } from '../modals'
+import { auth } from '../../config/firebase'
+import { useAuthenticate } from '../../context/AuthenticateUserContext'
 
 type LoginPageCollectionCenterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'LoginPage_CollectionCenter'>;
 }
 
-export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCenterProps) {
+export function LoginPageCollectionCenter ({ navigation }: LoginPageCollectionCenterProps) {
   const [centerEmployee, setCenterEmployee] = useState('')
   const [password, setPassword] = useState('')
-  const [loginErrorMessage, setLoginErrorMessage] = useState('')
-  const [showLoginErrorModal, setShowLoginErrorModal] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [showErrorModal, setShowErrorModal] = useState(false)
   const { setFirebaseActiveUser, setIdToken, setActiveCenterEmployee, setKgCollectedToday } = useCollectionCenterContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [visible, setVisible] = React.useState(false);
-  const { userCenter, setUserCenter } = useAuthenticate();
+  const [visible, setVisible] = React.useState(false)
+  const { setUserCenter } = useAuthenticate()
 
   const loginUser = async () => {
     setIsLoading(true)
     try {
-      const response = await signInWithEmailAndPassword(auth, centerEmployee, password)
+      const response = await signInWithEmailAndPassword(auth, centerEmployee.trim(), password)
       const idToken = await getIdToken(response.user)
-      const loginResponse = await postCenterEmployeeIdToken(idToken)
-      if (loginResponse.body.role === 'CENTER_EMPLOYEE') {
-        setIdToken(idToken)
-        setFirebaseActiveUser(response.user)
-        setActiveCenterEmployee(loginResponse.body.user)
-        setKgCollectedToday(loginResponse.body.total)
-        setCenterEmployee('')
-        setPassword('')
-        navigation.navigate('Menu_CollectionCenter')
-      } else {
-        setLoginErrorMessage('El usuario ingresado no es un empleado de centro de acopio')
-        setShowLoginErrorModal(true)
+      try {
+        const loginResponse = await postCenterEmployeeIdToken(idToken)
+        if (loginResponse.body.role === 'CENTER_EMPLOYEE') {
+          setIdToken(idToken)
+          setFirebaseActiveUser(response.user)
+          setActiveCenterEmployee(loginResponse.body.user)
+          setKgCollectedToday(loginResponse.body.total)
+          setCenterEmployee('')
+          setPassword('')
+          navigation.navigate('Menu_CollectionCenter')
+        } else {
+          signOut(auth)
+          setErrorMessage('El usuario ingresado no es un empleado del centro de acopio')
+          setShowErrorModal(true)
+        }
+      } catch (error) {
+        signOut(auth)
+        setErrorMessage('Error al obtener datos del usuario, por favor contacte con administración')
+        setShowErrorModal(true)
       }
     } catch (error) {
       console.log(error)
-      setLoginErrorMessage('El usuario o la contraseña son incorrectos')
-      setShowLoginErrorModal(true)
+      setErrorMessage('El usuario o la contraseña son incorrectos')
+      setShowErrorModal(true)
     }
     setIsLoading(false)
   }
+
   const hideDialog = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   return (
     <Gradient>
@@ -66,7 +74,6 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
             bicicletas ecológicas
           </Text>
           <View style={LoginPageStyles.grayContainer}>
-            <Text style={LoginPageStyles.welcomeText}>¡Bienvenido!</Text>
             <Text style={LoginPageStyles.rolText}>Administración</Text>
             <View style={LoginPageStyles.loginInputs}>
               <Input
@@ -103,15 +110,15 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
           <MessageCollectionCenter
             handlePress={() => { }}
             title='¡Error al iniciar sesión!'
-            description={loginErrorMessage}
-            visible={showLoginErrorModal}
-            setVisible={setShowLoginErrorModal}
+            description={errorMessage}
+            visible={showErrorModal}
+            setVisible={setShowErrorModal}
             errorMessage
           />
           <Portal>
             <Dialog visible={visible} onDismiss={hideDialog}>
-              <Dialog.Icon icon="alert" />
-              <Dialog.Title style={{ color: "#000", alignSelf: "center" }}>
+              <Dialog.Icon icon='alert' />
+              <Dialog.Title style={{ color: '#000', alignSelf: 'center' }}>
                 Centro de acopio
               </Dialog.Title>
               <Dialog.Content>
@@ -122,8 +129,9 @@ export function LoginPageCollectionCenter({ navigation }: LoginPageCollectionCen
                 <Button onPress={() => {
                   setUserCenter(false)
                   setVisible(!visible)
-                }
-                }>Ok</Button>
+                }}
+                >Ok
+                </Button>
               </Dialog.Actions>
             </Dialog>
           </Portal>

@@ -1,13 +1,12 @@
 import { CollectionCenters } from '../../Types'
 
-export const postCenterEmployee = (email: string, name: string, lastname: string, phone: string, password: string, collectCenterId: string) => {
-  const url = `http://${process.env.EXPO_PUBLIC_LOCAL_IP}:3000/api/v1/auth/register-employee`
-  fetch(url, {
+export const postCenterEmployee = async (email: string, name: string, lastname: string, phone: string, password: string, collectCenterId: string): Promise<any> => {
+  const url = 'https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/auth/register-employee'
+  return fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       email,
-      name,
-      lastname,
+      name: name + ' ' + lastname,
       phone,
       password,
       role: 'CENTER_EMPLOYEE',
@@ -17,10 +16,23 @@ export const postCenterEmployee = (email: string, name: string, lastname: string
       'Content-type': 'application/json; charset=UTF-8'
     }
   })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.json()
+    })
+    .then(data => {
+      return data
+    })
+    .catch(error => {
+      console.error('Fetch error:', error)
+      throw error
+    })
 }
 
 export const getCollectionsCenters = async (): Promise<CollectionCenters> => {
-  const url = `http://${process.env.EXPO_PUBLIC_LOCAL_IP}:3000/api/v1/collect-centers/all`
+  const url = 'https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/collect-centers/all'
   return fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -33,5 +45,6 @@ export const getCollectionsCenters = async (): Promise<CollectionCenters> => {
     })
     .catch(error => {
       console.error('Fetch error:', error)
+      throw error
     })
 }

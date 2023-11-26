@@ -96,7 +96,6 @@ export interface RecolectionCollectionCenterBody {
 export interface CenterEmployeeBody {
     email: string;
     name: string;
-    lastName: string;
     phone: string;
     createdAt: string;
     updatedAt: string;

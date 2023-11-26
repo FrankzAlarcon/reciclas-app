@@ -11,6 +11,11 @@ export const HomePageStyles = StyleSheet.create({
     marginHorizontal: '5%',
     padding: '10%'
   },
+  logout: {
+    position: 'absolute',
+    top: '10%',
+    left: '8%'
+  },
   userImage: {
     width: 150,
     height: 150,

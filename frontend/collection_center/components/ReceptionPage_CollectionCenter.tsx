@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import { ReceptionPageStyles } from './ReceptionPageStyles_Reception'
-import { ReciclasLogo, TrashCan, Comment, User, Scan } from '../../../assets'
+import { ReceptionPageStyles } from '../styles'
+import { ReciclasLogo, TrashCan, Comment, User, Scan } from '../../assets'
 import { useEffect, useState } from 'react'
-import { postLogActionCollaborator, postObservation } from '../../services'
+import { postLogActionCollaborator, postObservation } from '../services'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { Gradient, Input, KeyboardAvoidingWrapper, useCollectionCenterContext } from '../../../global'
-import { MessageCollectionCenter, ScanQRCollectionCenter } from '../../modals'
+import { Gradient, Input, KeyboardAvoidingWrapper, useCollectionCenterContext } from '../../global'
+import { MessageCollectionCenter, ScanQRCollectionCenter } from '../modals'
 import { Button, ActivityIndicator } from 'react-native-paper'
 
 export function ReceptionPageCollectionCenter () {
@@ -16,21 +16,33 @@ export function ReceptionPageCollectionCenter () {
   const [scanned, setScanned] = useState(false)
   const [openCamera, setOpenCamera] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false)
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const { activeCenterEmployee, idToken } = useCollectionCenterContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const registerQuantity = async () => {
     setIsLoading(true)
-    const currentLogActionCollaboratorId = await postLogActionCollaborator(new Date().toISOString(), quantity, user, String(activeCenterEmployee.collectCenterId), activeCenterEmployee.email, idToken)
-    if (observation !== '') {
-      postObservation(observation, currentLogActionCollaboratorId, idToken)
+    try {
+      const currentLogActionCollaboratorId = await postLogActionCollaborator(new Date().toISOString(), quantity.trim(), user, String(activeCenterEmployee?.collectCenterId), String(activeCenterEmployee?.email), idToken)
+      try {
+        if (observation !== '') {
+          postObservation(observation.trim(), currentLogActionCollaboratorId, idToken)
+        }
+        setQuantity('')
+        setObservation('')
+        setUser('')
+        setScanned(false)
+        setOpenCamera(false)
+        setShowSuccessModal(true)
+      } catch (error) {
+        setErrorMessage('Error al registrar la observación, por favor contacte con administración')
+        setShowErrorModal(true)
+      }
+    } catch (error) {
+      setErrorMessage('Error al registrar la cantidad de botellas, por favor contacte con administración')
+      setShowErrorModal(true)
     }
-    setQuantity('')
-    setObservation('')
-    setUser('')
-    setScanned(false)
-    setOpenCamera(false)
-    setShowSuccessModal(true)
     setIsLoading(false)
   }
 
@@ -47,7 +59,8 @@ export function ReceptionPageCollectionCenter () {
         setHasPermission(false)
       }
     } catch (error) {
-      console.log(error)
+      setErrorMessage('Error al acceder a la cámara del dispositivo, por favor contacte con administración')
+      setShowErrorModal(true)
     }
   }
 
@@ -57,7 +70,8 @@ export function ReceptionPageCollectionCenter () {
       setScanned(true)
       setOpenCamera(false)
     } catch (error) {
-      console.log('Error al parse', error)
+      setErrorMessage('Error en la lectura QR, por favor contacte con administración')
+      setShowErrorModal(true)
     }
   }
 
@@ -70,17 +84,26 @@ export function ReceptionPageCollectionCenter () {
   }
 
   return (
-    <Gradient>
-      <MessageCollectionCenter
-        title='¡Registro exitoso!'
-        description='El registro de botellas se ha realizado con éxito.'
-        handlePress={() => {}}
-        visible={showSuccessModal}
-        setVisible={setShowSuccessModal}
-      />
-      <KeyboardAvoidingWrapper>
+    <KeyboardAvoidingWrapper>
+      <Gradient>
+        <MessageCollectionCenter
+          title='¡Error!'
+          description={errorMessage}
+          buttonText='Aceptar'
+          visible={showErrorModal}
+          setVisible={setShowErrorModal}
+          errorMessage
+          handlePress={() => {}}
+        />
+        <MessageCollectionCenter
+          title='¡Registro exitoso!'
+          description='El registro de botellas se ha realizado con éxito.'
+          handlePress={() => {}}
+          visible={showSuccessModal}
+          setVisible={setShowSuccessModal}
+        />
         <View>
-          <ReciclasLogo style={ReceptionPageStyles.appLogo} fill='#BDF26D' />
+          <ReciclasLogo style={ReceptionPageStyles.appLogo} width={70} height={70} fill='#BDF26D' />
           <View style={ReceptionPageStyles.centerView}>
             <View style={ReceptionPageStyles.content}>
               {!openCamera &&
@@ -90,7 +113,11 @@ export function ReceptionPageCollectionCenter () {
                 </TouchableOpacity>}
               {scanned &&
                 <View style={ReceptionPageStyles.user}>
-                  <User />
+                  <View style={ReceptionPageStyles.joinUserInfoDivider}>
+                    <View style={ReceptionPageStyles.userDivider} />
+                    <User fill='#BDF26D' />
+                    <View style={ReceptionPageStyles.userDivider} />
+                  </View>
                   <View style={ReceptionPageStyles.joinUserInfoDivider}>
                     <View style={ReceptionPageStyles.userDivider} />
                     <Text style={ReceptionPageStyles.userInfo}>{user}</Text>
@@ -148,7 +175,7 @@ export function ReceptionPageCollectionCenter () {
             </View>
           </View>
         </View>
-      </KeyboardAvoidingWrapper>
-    </Gradient>
+      </Gradient>
+    </KeyboardAvoidingWrapper>
   )
 }
