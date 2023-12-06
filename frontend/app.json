@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "frontend",
+    "name": "Reciclas Ecuador",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,10 +22,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "reciclas.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "15710d3c-d249-4934-86ab-49c67d36c147"
+      }
     }
   }
 }
