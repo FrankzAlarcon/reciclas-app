@@ -17,7 +17,6 @@ import { signInwithEmail } from "./utils/signInWithEmail";
 import { registerWithEmail } from "./utils/registerWithEmail";
 import {
   CollectionCenter,
-  UserIdentificationCollectionCenter,
 } from "./collection_center";
 import { useAuthenticate } from "./context/AuthenticateUserContext";
 
@@ -29,11 +28,18 @@ const LoginAthentication = () => {
 
   const { form, onChange } = useForm({
     email: "",
+    ci: "",
+    name: "",
+    lastname: "Parraga",
+    phone: "0987817935",
+    province: "Pichincha",
+    city: "",
+    address: "Pichincha",
     password: "",
-    nombre: "",
+    role: "USER"
   });
 
-  const { email, password, nombre } = form;
+  let { email, password, name, ci, phone, province, city, address, lastname } = form;
 
   const hideDialog = () => {
     setVisible(!visible);
@@ -174,8 +180,7 @@ const LoginAthentication = () => {
                 mode="outlined"
                 label="Nombre y Apellido"
                 placeholder="Nombre y Apellido"
-                onChangeText={(value) => onChange(value, "nombre")}
-                // right={<TextInput.Affix text="/100" />}
+                onChangeText={(value) => onChange(value, "name")}
                 outlineStyle={{ borderColor: "#fff", borderRadius: 10 }}
                 textColor="#000"
                 cursorColor="#000"
@@ -186,6 +191,7 @@ const LoginAthentication = () => {
                 mode="outlined"
                 label="Cédula"
                 placeholder="Ingrese cédula"
+                onChangeText={(value) => onChange(value, "ci")}
                 // onChangeText={(value) =>
                 //   onChange(value.charAt(0).toUpperCase(), "email")
                 // }
@@ -200,6 +206,7 @@ const LoginAthentication = () => {
                 mode="outlined"
                 label="Ciudad"
                 placeholder="Ingrese el ciudad"
+                onChangeText={(value) => onChange(value, "city")}
                 // onChangeText={(value) =>
                 //   onChange(value, "email")
                 // }
@@ -260,7 +267,10 @@ const LoginAthentication = () => {
                   marginBottom: 25,
                   marginHorizontal: "10%",
                 }}
-                onPress={() => registerWithEmail(email, password, nombre)}
+                onPress={() => {
+                  console.log(email, password, name, ci, lastname, phone, province, city, address)
+                  registerWithEmail(email, password, name, ci, lastname, phone, province, city, address)
+                }}
               // onPress={() => signInwithEmail(email, password)}
               >
                 Registrate

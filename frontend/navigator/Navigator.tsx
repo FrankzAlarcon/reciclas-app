@@ -5,14 +5,13 @@ import UserQr_home from "../user/components/UserQr_home";
 import UserChart_home from "../user/components/UserChart_home";
 import TabNavigator from "./TabNavigator";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Dimensions } from "react-native";
+import { Animated, Dimensions, Platform } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { ChatCohere } from "../cohere/ChatCohere";
 import { useAuthenticate } from "../context/AuthenticateUserContext";
 import { auth } from "../config/firebase";
 import LoginAthentication from "../LoginAthentication";
-import { CollectionCenter, LoginPageCollectionCenter } from "../collection_center";
 
 const Stack = createNativeStackNavigator();
 const tab = createBottomTabNavigator();
@@ -22,19 +21,29 @@ const Navigator = () => {
 
   // validation if user is authenticated
   const [initializing, setInitializing] = useState(true);
-  const { user, setUser, userToken, setUserToken } = useAuthenticate();
+  const { user, setUser, setUserToken } = useAuthenticate();
   console.log("Nombre displayName", auth.currentUser?.displayName);
 
-  const onAuthStateChanged = (user: any) => {
-    setUser(user);
-    setUserToken(user?.stsTokenManager?.accessToken);
-    console.log("user Nav-> ", user.stsTokenManager.accessToken);
-    if (initializing) setInitializing(true);
+  const onAuthStateChanged = async (user: any) => {
+    try {
+      if (user) {
+        setUser(user);
+        setUserToken(user?.stsTokenManager?.accessToken);
+        console.log("user Nav-> ", user.stsTokenManager.accessToken);
+        if (initializing) setInitializing(true)
+      } else {
+        setUser(null);
+        setUserToken(null);
+        setInitializing(false);
+      }
+    } catch (error) {
+      console.error("Error in onAuthStateChanged: ", error);
+    }
   };
 
   useEffect(() => {
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
+    return () => subscriber();
   });
 
   // finish validation
@@ -69,14 +78,6 @@ const Navigator = () => {
     UserQr_home: { focused: "bicycle-outline", notFocused: "bicycle-sharp" },
   };
 
-  // && auth.currentUser?.emailVerified
-
-  // if (!user) {
-  //   // Martin 
-  //   return (
-  //     <LoginAthentication />
-  //   )
-  // } else {
   return user ? (
     <NavigationContainer>
       <tab.Navigator
@@ -87,7 +88,7 @@ const Navigator = () => {
           tabBarStyle: {
             backgroundColor: "#494D4f",
             borderColor: "#494D4f",
-            height: 55,
+            height: Platform.OS === 'ios' ? 70 : 55,
           },
 
           tabBarIcon: ({ focused, color, size }) => {
@@ -173,7 +174,7 @@ const Navigator = () => {
           height: 4,
           position: "absolute",
           backgroundColor: "#494",
-          bottom: 50,
+          bottom: Platform.OS === 'ios' ? 66 : 50,
           left: 14,
           borderRadius: 50,
           transform: [{ translateX: tabOffsetValue }],

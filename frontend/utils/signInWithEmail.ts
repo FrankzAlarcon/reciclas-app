@@ -1,7 +1,6 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../config/firebase'
 import { Alert } from 'react-native'
-// import { useAuthenticate } from '../context/AuthenticateUserContext'
 
 
 export const signInwithEmail = (email: string, password: string) => {

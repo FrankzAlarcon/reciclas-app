@@ -85,7 +85,7 @@ const UserMain_home = () => {
               <View>
                 <Text style={styles.text}>
                   {/* Hola! {item.title.split(" ")[0]} */}
-                  Hola! David
+                  Hola! {auth.currentUser?.displayName}
                 </Text>
               </View>
             </View>
@@ -162,7 +162,7 @@ const UserMain_home = () => {
                 strokeWidth={10}
                 radius={80}
                 chartConfig={chartConfig}
-                // hideLegend={false}
+              // hideLegend={false}
               />
             </View>
           </View>

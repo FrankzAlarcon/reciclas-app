@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth'
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDatabase } from '@firebase/database';
 
 const firebaseConfig = {
@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 // const database = getDatabase()
 
-initializeAuth(app, { persistence: getReactNativePersistence(ReactNativeAsyncStorage) })
+initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) })
 
 export const auth = getAuth(app)
 export const realtimeDB = getDatabase(app)
