@@ -5,7 +5,7 @@ export const ReceptionPageStyles = StyleSheet.create({
   appLogo: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight * 1.82
   },
   centerView: {
     height: Dimensions.get('window').height - (Dimensions.get('window').height * 0.17),
@@ -51,11 +51,13 @@ export const ReceptionPageStyles = StyleSheet.create({
   userDivider: {
     borderBottomWidth: 1,
     flex: 1,
-    marginHorizontal: '4%'
+    marginHorizontal: '4%',
+    borderColor: 'gray'
   },
   userInfo: {
     fontWeight: 'bold',
-    textShadowColor: 'rgba(119, 166, 73, 1)',
+    color: '#BDF26D',
+    textShadowColor: 'rgba(0, 0, 0, 1)',
     textShadowOffset: { width: 0, height: 0.7 },
     textShadowRadius: 4
   },

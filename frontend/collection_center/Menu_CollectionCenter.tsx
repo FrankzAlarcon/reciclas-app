@@ -5,6 +5,8 @@ import { HomePageCollectionCenter, ReceptionPageCollectionCenter } from './compo
 import { HomeCollectionCenter, ReceptionCollectionCenter } from '../assets'
 import { Animated, Dimensions, Keyboard, View } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
+import TabNavigator from '../navigator/TabNavigator'
+import { Ionicons } from '@expo/vector-icons'
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -61,8 +63,7 @@ function MyTabs () {
           },
           tabBarStyle: {
             backgroundColor: '#494D4f',
-            borderColor: '#494D4f',
-            paddingHorizontal: '16.5%'
+            borderColor: '#494D4f'
           },
           tabBarInactiveTintColor: 'grey',
           tabBarActiveTintColor: '#BDF26D',
@@ -72,6 +73,8 @@ function MyTabs () {
               return <HomeCollectionCenter fill='none' stroke={color} strokeWidth={2} />
             } else if (route.name === 'ReceptionPage_CollectionCenter') {
               return <ReceptionCollectionCenter fill={color} />
+            } else if (route.name === 'Events') {
+              return <Ionicons name='calendar' color={color} size={28} />
             }
           }
         })}
@@ -82,7 +85,7 @@ function MyTabs () {
           listeners={({ navigation, route }) => ({
             focus: () => {
               Animated.spring(tabOffsetValue, {
-                toValue: getWidth() / 3.75,
+                toValue: getWidth() / 9.5,
                 useNativeDriver: true
               }).start()
             }
@@ -94,7 +97,19 @@ function MyTabs () {
           listeners={() => ({
             focus: () => {
               Animated.spring(tabOffsetValue, {
-                toValue: getWidth() / 1.66,
+                toValue: getWidth() / 2.3,
+                useNativeDriver: true
+              }).start()
+            }
+          })}
+        />
+        <Stack.Screen
+          name='Events'
+          component={TabNavigator}
+          listeners={() => ({
+            focus: () => {
+              Animated.spring(tabOffsetValue, {
+                toValue: getWidth() / 1.3,
                 useNativeDriver: true
               }).start()
             }

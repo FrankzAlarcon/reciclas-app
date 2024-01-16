@@ -1,6 +1,5 @@
 import { Keyboard, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
-import Constants from 'expo-constants'
 
 type Props = {
     children: React.ReactNode;
@@ -13,7 +12,7 @@ export function KeyboardAvoidingWrapper ({ children, scroll = false }: Props) {
   }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1, marginTop: Constants.statusBarHeight }}>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
       <ScrollView scrollEnabled={scroll}>
         <TouchableWithoutFeedback onPress={handlePress}>
           {children}

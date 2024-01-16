@@ -1,24 +1,26 @@
-import { View, Image, Text, Dimensions } from 'react-native'
-import { HomePageStyles } from './HomePageStyles_Home'
-import { CenterEmployeeBody, RootStackParamList } from '../../../Types'
+import { View, Image, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { HomePageStyles } from '../styles'
+import { CenterEmployeeBody, RootStackParamList } from '../../Types'
 import { useCallback, useEffect, useState } from 'react'
-import { getToPickupCollectionCenter } from '../../services'
-import { Gradient, useCollectionCenterContext } from '../../../global'
+import { getToPickupCollectionCenter } from '../services'
+import { Gradient, useCollectionCenterContext } from '../../global'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ConfirmationCollectionCenter } from '../../modals'
+import { ConfirmationCollectionCenter, MessageCollectionCenter } from '../modals'
 import { ProgressChart } from 'react-native-chart-kit'
-import { ReciclasLogo } from '../../../assets'
+import { ReciclasLogo, Logout } from '../../assets'
 import { User, signOut } from 'firebase/auth'
 import { useFocusEffect } from '@react-navigation/native'
-import { auth } from '../../../config/firebase'
+import { auth } from '../../config/firebase'
 
 type HomePageCollectionCenterProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'HomePage_CollectionCenter'>;
 }
 
-export function HomePageCollectionCenter({ navigation }: HomePageCollectionCenterProps) {
+export function HomePageCollectionCenter ({ navigation }: HomePageCollectionCenterProps) {
   const [totalCollectedToday, setTotalCollectedToday] = useState<number>()
   const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false)
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const { setFirebaseActiveUser, activeCenterEmployee, setActiveCenterEmployee, idToken, setIdToken, kgCollectedToday } = useCollectionCenterContext()
   const [chartData, setChartData] = useState<number[]>([0] as number[])
   let firstRender = true
@@ -35,16 +37,20 @@ export function HomePageCollectionCenter({ navigation }: HomePageCollectionCente
   const screenWidth = Dimensions.get('window').width
   const screenHeight = Dimensions.get('window').height
 
-  async function fetchTotalCollectedToday() {
-    const totalCollectedTodayBasic = await getToPickupCollectionCenter(activeCenterEmployee.collectCenterId, idToken)
-    setTotalCollectedToday(totalCollectedTodayBasic)
-    setChartData([(totalCollectedTodayBasic > 300 ? 1 : (totalCollectedTodayBasic) / 300)])
+  async function fetchTotalCollectedToday () {
+    try {
+      const totalCollectedTodayBasic = await getToPickupCollectionCenter(activeCenterEmployee?.collectCenterId, idToken)
+      setTotalCollectedToday(totalCollectedTodayBasic)
+      setChartData([(totalCollectedTodayBasic > 300 ? 1 : (totalCollectedTodayBasic) / 300)])
+    } catch (error) {
+      setErrorMessage('No fue posible actualizar la cantidad de residuos recolectados hoy, por favor contacte con administración')
+      setShowErrorModal(true)
+    }
   }
 
   useEffect(() => {
     const handleBack = () => navigation.addListener('beforeRemove', (e) => {
       e.preventDefault()
-      setShowConfirmationModal(true)
     })
     handleBack()
   }, [navigation])
@@ -77,9 +83,21 @@ export function HomePageCollectionCenter({ navigation }: HomePageCollectionCente
         visible={showConfirmationModal}
         setVisible={setShowConfirmationModal}
       />
+      <MessageCollectionCenter
+        title='¡Error!'
+        description={errorMessage}
+        buttonText='Aceptar'
+        visible={showErrorModal}
+        setVisible={setShowErrorModal}
+        errorMessage
+        handlePress={() => {}}
+      />
       <View style={HomePageStyles.user}>
+        <TouchableOpacity style={HomePageStyles.logout} onPress={() => setShowConfirmationModal(true)}>
+          <Logout width={45} height={45} fill='none' stroke='#FFF' />
+        </TouchableOpacity>
         <Image style={HomePageStyles.userImage} source={{ uri: 'https://static.wikia.nocookie.net/multiversus/images/7/71/Evil_Morty_Profile_Icon.png/revision/latest?cb=20220816020218' }} />
-        <Text style={HomePageStyles.userName}>¡Hola, {activeCenterEmployee.name.split(' ')[0]}!</Text>
+        <Text style={HomePageStyles.userName}>¡Hola, {activeCenterEmployee?.name?.split(' ')[0]}!</Text>
       </View>
       <View style={HomePageStyles.summary}>
         <Text style={HomePageStyles.sectionTitle}>Resumen</Text>

@@ -1,10 +1,11 @@
 import { Platform, StyleSheet } from 'react-native'
+import Constants from 'expo-constants'
 
 export const LoginPageStyles = StyleSheet.create({
   appLogo: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: '10%'
+    marginTop: Constants.statusBarHeight * 2.19
   },
   appTitle: {
     color: 'white',
@@ -56,29 +57,19 @@ export const LoginPageStyles = StyleSheet.create({
       }
     })
   },
-  welcomeText: {
+  rolText: {
     color: 'white',
     marginLeft: 'auto',
     marginRight: 'auto',
     fontSize: 43,
     fontWeight: 'bold',
     alignContent: 'center',
-    marginTop: '8%',
-    textShadowColor: 'rgba(0, 0, 0, 1)',
-    textShadowOffset: { width: 0, height: 0.7 },
-    textShadowRadius: 4
-  },
-  rolText: {
-    color: 'white',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    alignContent: 'center',
+    marginVertical: '9.3%',
     textShadowColor: 'rgba(0, 0, 0, 1)',
     textShadowOffset: { width: 0, height: 0.7 },
     textShadowRadius: 4
   },
   loginInputs: {
-    marginTop: '5%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

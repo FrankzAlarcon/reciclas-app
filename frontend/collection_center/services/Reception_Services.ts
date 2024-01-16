@@ -1,5 +1,5 @@
 export const postLogActionCollaborator = async (submitDate: string, quantity: string, collaboratorEmail: string, collectCenterId: string, receiverEmail: string, idToken: string): Promise<string> => {
-  const url = `http://${process.env.EXPO_PUBLIC_LOCAL_IP}:3000/api/v1/log-actions-collaborators`
+  const url = 'https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/log-actions-collaborators'
   return fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -17,15 +17,24 @@ export const postLogActionCollaborator = async (submitDate: string, quantity: st
       Authorization: `Bearer ${idToken}`
     }
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.json()
+    })
     .then((json) => {
       return String(json.body.id)
     })
+    .catch(error => {
+      console.error('Fetch error:', error)
+      throw error
+    })
 }
 
-export const postObservation = (comment: string, logActionsCollaboratorId: string, idToken: string) => {
-  const url = `http://${process.env.EXPO_PUBLIC_LOCAL_IP}:3000/api/v1/observations`
-  fetch(url, {
+export const postObservation = async (comment: string, logActionsCollaboratorId: string, idToken: string): Promise<any> => {
+  const url = 'https://reciclas-app-backend-dev-sptb.3.us-1.fl0.io/api/v1/observations'
+  return fetch(url, {
     method: 'POST',
     body: JSON.stringify({
       comment,
@@ -36,4 +45,17 @@ export const postObservation = (comment: string, logActionsCollaboratorId: strin
       Authorization: `Bearer ${idToken}`
     }
   })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      return response.json()
+    })
+    .then(data => {
+      return data
+    })
+    .catch(error => {
+      console.error('Fetch error:', error)
+      throw error
+    })
 }

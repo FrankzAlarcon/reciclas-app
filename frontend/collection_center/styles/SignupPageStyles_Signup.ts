@@ -5,7 +5,7 @@ export const SignupPageStyles = StyleSheet.create({
   backButton: {
     marginLeft: '3%',
     alignSelf: 'flex-start',
-    marginTop: Constants.statusBarHeight
+    marginTop: Constants.statusBarHeight * 2
   },
   appLogo: {
     marginTop: '-11%',

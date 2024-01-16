@@ -1,13 +1,13 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MenuCollectionCenter } from "./Menu_CollectionCenter";
-import { UserIdentificationCollectionCenter } from "./UserIdentification_CollectionCenter";
-import { PaperProvider } from "react-native-paper";
-import { CollectionCenterContextProvider } from "../global";
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { MenuCollectionCenter } from './Menu_CollectionCenter'
+import { UserIdentificationCollectionCenter } from './UserIdentification_CollectionCenter'
+import { PaperProvider } from 'react-native-paper'
+import { CollectionCenterContextProvider } from '../global'
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator()
 
-export function CollectionCenter() {
+export function CollectionCenter () {
   return (
     <CollectionCenterContextProvider>
       <PaperProvider>
@@ -27,5 +27,5 @@ export function CollectionCenter() {
         </NavigationContainer>
       </PaperProvider>
     </CollectionCenterContextProvider>
-  );
+  )
 }
